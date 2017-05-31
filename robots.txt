@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /application/
+Disallow: /cms/
+Disallow: /admin/
+Disallow: /administrator/
+Disallow: /wp-admin/
+Disallow: /login-admin/
+
+User-Agent: MJ12bot
+Disallow: 

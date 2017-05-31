@@ -1,0 +1,192 @@
+<?php
+	/**
+	* name: tinhnguyenvan
+	* email: tinhnguyenvan91@gmail.com
+	* phone: 0909 977 920
+	* @__construct => khoi tao doi tuong
+	* @ index() => mac dinh
+	*/
+	class group extends MY_Controller
+	{
+		
+		function __construct()
+		{
+			# code...
+			parent::__construct();
+		}
+		public function index()
+		{
+			# code...		
+			$this->_data['s_info'] = $s_info = $this->session->userdata('userInfo');	
+			$this->_data["title"]  = 'Danh sách group';			
+			$and = '';
+			$this->_data['orderby']=$orderby = 'group_order asc';
+			$this->_data['list'] = $this->mgroup->getQuery($object="",$join="",$and,$orderby,$limit="");
+
+			/**begin xoa check chon*/
+			if(isset($_POST['delAll'])){
+				$checkid = isset($_POST['checkid']) ? $_POST['checkid']:'';
+				if($checkid){
+					foreach ($checkid as $key => $value) {
+						# code...
+						if(is_numeric($value)){
+							$myGroup = $this->mgroup->getData('',array("id"=>$value));
+							if($myGroup['id']>0){								
+								$this->mgroup->delete($value);															
+							}
+						}
+					}
+					/**begin chuyen trang*/
+					header("location:".current_url());
+					/**end chuyen trang*/
+				}else{
+					$this->_data['error'][] = 'Vui lòng kiểm tra check chọn';
+				}
+			}
+			/**end xoa check chon*/
+			$this->my_layout->view("cms/group/index",$this->_data);
+		}		
+		public function add()
+		{
+			# code...
+			$this->_data = array();
+			$this->_data['s_info'] = $s_info = $this->session->userdata('userInfo');	
+			$this->_data["title"]  = 'Add';					
+			$this->_data['error'] = "";
+			$this->_data['success'] = "";
+			$this->_data['lang'] = my_lib::lang();
+			$this->_data["title"]  = 'Add menu';
+			$this->_data['formData']	= array(
+				"group_name"=>"",								
+				"group_note"=>"",																						
+				"group_order"=>0,
+				"group_create"=>date("Y-m-d H:i:s"),				
+				"user"=>$s_info['s_user_id']							
+			);			
+
+			if(isset($_POST['fsubmit'])){				
+				$this->_data['formData']	= array(
+					"group_name"=>isset($_POST['group_name']) && $_POST['group_name'] ? $_POST['group_name']:'',										
+					"group_note"=>isset($_POST['group_note']) && $_POST['group_note'] ? $_POST['group_note']:'',															
+					"group_order"=>isset($_POST['group_order']) ? $_POST['group_order']:0,
+					"group_create"=>date("Y-m-d H:i:s"),					
+					"user"=>$s_info['s_user_id']
+				);	
+				if($this->_data['formData']['group_name']){
+					$insert = $this->mgroup->add($this->_data['formData']);
+					if(is_numeric($insert)>0){
+						$this->_data['success'][] = "Add success";
+						$this->_data['formData'] = NULL;
+						/**begin chuyen trang*/
+						if(isset($_REQUEST['redirect']) && $_REQUEST['redirect']){
+							header("location:".base64_decode($_REQUEST['redirect']));
+						}else{
+							// header("location:".my_lib::cms_site()."news/");
+							header("location:".my_lib::cms_site()."group/edit/".$insert."/?info=add");
+						}
+						/**end chuyen trang*/
+					}else{
+						$this->_data['error'][] = "Add Not Success";
+					}
+				}else{
+					$this->_data['error'][] = "Bạn chưa nhập tên";
+				}
+			}			
+			$this->my_layout->view("cms/group/add",$this->_data);
+		}
+
+		public function edit($id)
+		{
+			# code...
+			$myGroup = '';
+			if(is_numeric($id)){
+				$myGroup = $this->mgroup->getData('',array("id"=>$id));
+				if($myGroup['id']<=0){
+					header("location:".my_lib::cms_site().'error/notfound');
+					exit();
+				}
+			}else{
+				header("location:".my_lib::cms_site().'error/notfound');
+				exit();
+			}
+
+			$this->_data = array();
+			$this->_data['s_info'] = $s_info = $this->session->userdata('userInfo');	
+			$this->_data['lang'] = my_lib::lang();
+			$this->_data["title"]  = 'Update';		
+			$this->_data['error'] = "";
+			$this->_data['success'] = "";
+			$this->_data['info'] = "";
+			if(isset($_REQUEST['info']) && $_REQUEST['info']=="add")
+			{
+				$this->_data['info'][] = 'Edit success';
+			}
+			$this->_data["title"]  = 'Edit menu';
+			$this->_data['formData']	= array(
+				"group_name"=>isset($myGroup['group_name']) ? $myGroup['group_name']:'',												
+				"group_note"=>isset($myGroup['group_note']) ? $myGroup['group_note']:'',												
+				"group_order"=>isset($myGroup['group_order']) ? $myGroup['group_order']:0,
+				"group_create"=>date("Y-m-d H:i:s"),				
+				"user"=>$s_info['s_user_id']							
+			);			
+
+			if(isset($_POST['fsubmit'])){
+				$this->_data['formData']	= array(
+					"group_name"=>isset($_POST['group_name']) && $_POST['group_name'] ? $_POST['group_name']:'',										
+					"group_note"=>isset($_POST['group_note']) && $_POST['group_note'] ? $_POST['group_note']:'',
+					"group_order"=>isset($_POST['group_order']) && $_POST['group_order'] ? $_POST['group_order']:'',
+					"user"=>$s_info['s_user_id']
+				);	
+				if($this->_data['formData']['group_name']){					
+					if($this->mgroup->edit($id,$this->_data['formData'])){
+						$this->_data['success'][] = "Edit success";
+						$this->_data['formData'] = NULL;
+						/**begin chuyen trang*/
+						if(isset($_REQUEST['redirect']) && $_REQUEST['redirect']){
+							header("location:".base64_decode($_REQUEST['redirect']));
+						}else{
+							header("location:".my_lib::cms_site()."group/");
+						}
+						/**end chuyen trang*/
+					}else{
+						$this->_data['error'][] = "Edit Not Success";
+					}
+				}else{
+					$this->_data['error'][] = "Bạn chưa nhập tên";
+				}
+			}	
+			$this->my_layout->view("cms/group/edit",$this->_data);
+		}
+		/**end them moi menu*/
+
+		/**begin delete */
+		public function delete($id)
+		{			
+			# code...
+			$this->_data['s_info'] = $s_info = $this->session->userdata('userInfo');	
+			$myGroup = '';
+			$this->_data['title'] = "Delete";
+			if(is_numeric($id)){
+				$myGroup = $this->mgroup->getData('',array("id"=>$id));
+				if($myGroup['id']<=0){
+					header("location:".my_lib::cms_site().'error/notfound');
+					exit();
+				}else{					
+					$this->mgroup->delete($id);
+					/**begin chuyen trang*/
+					if(isset($_REQUEST['redirect']) && $_REQUEST['redirect']){
+						header("location:".base64_decode($_REQUEST['redirect']));
+					}else{
+						header("location:".my_lib::cms_site()."group/");
+					}
+					/**end chuyen trang*/									
+				}
+			}else{
+				header("location:".my_lib::cms_site().'error/notfound');
+				exit();
+			}		
+			$this->my_layout->view("cms/group/delete",$this->_data);
+		}
+		/**end delete */	
+	}
+?>

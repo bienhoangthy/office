@@ -1,0 +1,2 @@
+#Deny from all
+RewriteCond $1 !^(libraries|views)
