@@ -205,7 +205,7 @@
 				'headings' => $heading,
 				'include_player_ids' => $id_code_user,
 	      		'url' => $link,
-	      		//'chrome_big_picture' => $img,
+	      		'chrome_web_icon' => $img,
 				'contents' => $content
 			);
 			

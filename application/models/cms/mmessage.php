@@ -132,7 +132,7 @@
 				'headings' => $heading,
 				'included_segments' => array('All'),
 	      		'url' => $link,
-	      		//'chrome_big_picture' => $img,
+	      		'chrome_web_icon' => $img,
 				'contents' => $content
 			);
 			
