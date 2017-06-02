@@ -249,8 +249,8 @@
 						$insert = $this->mtask->add($dataAddTask);
 						if ($insert > 0) {
 							if ($myUser['user_push_id'] != "") {
-								//$img = my_lib::base_url().'media/user/'.$s_info['s_user_avatar'];
-								$this->mtask->sendMessage(array($myUser['user_push_id']),$dataAddTask['task_name'],my_lib::cms_site()."project/detail/".$project_id);
+								$img = my_lib::base_url().'media/user/'.$s_info['s_user_avatar'];
+								$this->mtask->sendMessage(array($myUser['user_push_id']),$dataAddTask['task_name'],my_lib::cms_site()."project/detail/".$project_id,$img);
 							}
 						}
 						header("location:".my_lib::cms_site()."project/detail/".$project_id);
@@ -318,8 +318,8 @@
 						$user_id = $user_tran;
 						if ($insert > 0) {
 							if ($userTran['user_push_id'] != "") {
-								//$img = my_lib::base_url().'media/user/'.$s_info['s_user_avatar'];
-								$this->mtask->sendMessage(array($userTran['user_push_id']),$dataAddTask['task_name'],my_lib::cms_site()."project/detail/".$myPhase['project_id']);
+								$img = my_lib::base_url().'media/user/'.$s_info['s_user_avatar'];
+								$this->mtask->sendMessage(array($userTran['user_push_id']),$dataAddTask['task_name'],my_lib::cms_site()."project/detail/".$myPhase['project_id'],$img);
 							}
 						}
 					}

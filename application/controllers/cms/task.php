@@ -186,8 +186,8 @@
 					if ($insert > 0) {
 						$push_user_id = $this->muser->getData("user_push_id",array('id' => $value));
 						if ($push_user_id['user_push_id'] != "") {
-							//$img = my_lib::base_url().'media/user/'.$s_info['s_user_avatar'];
-							$this->mtask->sendMessage(array($push_user_id['user_push_id']),$task_name,my_lib::cms_site()."task/edit/".$insert);
+							$img = my_lib::base_url().'media/user/'.$s_info['s_user_avatar'];
+							$this->mtask->sendMessage(array($push_user_id['user_push_id']),$task_name,my_lib::cms_site()."task/edit/".$insert,$img);
 						}
 					}
 				}

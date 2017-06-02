@@ -84,8 +84,8 @@
 					$insert = $this->mmessage->add($this->_data['formData']);
 					if(is_numeric($insert)>0){
 						//Push Notification
-						//$img = my_lib::base_url().'media/user/'.$s_info['s_user_avatar'];
-						$this->mmessage->sendMessage($this->_data['formData']['ms_title'],my_lib::cms_site()."message/detail/".$insert);
+						$img = my_lib::base_url().'media/user/'.$s_info['s_user_avatar'];
+						$this->mmessage->sendMessage($this->_data['formData']['ms_title'],my_lib::cms_site()."message/detail/".$insert,$img);
 
 						$this->_data['success'][] = "Add success";
 						$this->_data['formData'] = NULL;
