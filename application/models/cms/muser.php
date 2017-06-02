@@ -389,8 +389,8 @@
 		/**begin lay ra ngay sinh nhat cua nhan vien*/
 		public function showBirthDay()
 		{
-			if (date("H:i:s") < "08:20:00") {
-				$today = date("Y-m-d");
+			$today = date("Y-m-d");
+			if ((int)config_birthday < strtotime($today)) {
 				$tomorrow = strtotime(date("Y-m-d", strtotime($today)) . " +1 day");
   				$tomorrow = strftime("%Y-%m-%d", $tomorrow);
   				$daysoon = date("d",strtotime($tomorrow));
@@ -415,7 +415,7 @@
 				}
 				$this->editEvent(1,array('event_detail' => $BDToday));
 				$this->editEvent(2,array('event_detail' => $BDSoon));
-				return true;
+				$this->mconfig->edit(13,array('config_value' => strtotime($today)));
 			}
 			return true;
 		}
