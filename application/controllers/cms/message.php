@@ -255,7 +255,7 @@
 			$this->_data['listUserPush'] = $this->muser->getQuery("user_fullname,user_push_id","","user_status = 1 and user_push_id <> ''","id asc","");
 			if (isset($_POST['fsubmit'])) {
 				$s_info = $this->session->userdata('userInfo');
-				//$img = my_lib::base_url().'media/user/'.$s_info['s_user_avatar'];
+				$img = my_lib::base_url().'media/user/'.$s_info['s_user_avatar'];
 				$title = $s_info['s_user_fullname'].': '.$this->input->post('title');
 				$send_user = $this->input->post('user_push_id');
 				if ($send_user == "all") {
